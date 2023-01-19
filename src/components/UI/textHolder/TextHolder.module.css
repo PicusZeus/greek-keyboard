@@ -1,0 +1,12 @@
+.main {
+    display: block;
+    margin: 3rem;
+    min-height: 10rem;
+    text-align: center;
+    font-size: 1.1rem;
+    background: RGBA(24, 24, 24, 0.1);
+    box-shadow: 12px 12px 24px 3px rgba(20,14,20,1);
+    max-width: 1400px;
+    padding: 1rem;
+    border-radius: 2%;
+}

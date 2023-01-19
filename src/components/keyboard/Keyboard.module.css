@@ -1,0 +1,31 @@
+.Keyboard {
+  left: 0;
+  top: 40px;
+  width: 100%;
+  padding: 5px 0;
+  background: darkgray;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  user-select: none;
+  transition: top 0.4s;
+}
+.Keyboard__hidden {
+  top: -100%;
+}
+.Keyboard__keys {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+.Keyboard__keys div {
+  display: inline-block;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+@media (min-width: 1300px) {
+  .Keyboard__keys div {
+    width: 80%;
+  }
+}

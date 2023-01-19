@@ -1,0 +1,15 @@
+.Button {
+  border: 4px solid grey;
+  padding: 18px;
+  border-radius: 30%;
+  font-weight: bold;
+  min-width: 10rem;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 1.3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: top;
+  position: relative;
+  box-shadow: 13px 10px 5px 0 rgba(0, 0, 0, 0.75);
+}

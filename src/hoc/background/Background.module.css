@@ -1,0 +1,6 @@
+.background {
+    background-size: cover;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
