@@ -1,7 +1,7 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit";
 import { strokes } from "../assets/Strokes";
-import { SHIFT, DEAD } from "../assets/Variables";
-
+import { SHIFT } from "../assets/Variables";
+import {nextStrokes} from "./actionNextStrokes";
 const initialState = {
   inputText: "",
   language: "gr",
@@ -10,9 +10,10 @@ const initialState = {
   capslock: false,
   shouldBeClicked: { ...strokes },
   shouldShift: false,
-  shouldDead: false,
-  shouldShiftDead: false,
-  shouldShiftWDead: false,
+  shouldAcute: false,
+  shouldDiaeresis: false,
+  shouldDiaeresisWithAcute: false,
+  nextToBeClickedComposing: false
 };
 
 const keyboardSlice = createSlice({
@@ -27,10 +28,11 @@ const keyboardSlice = createSlice({
       }
     },
     addToInputText(state, action) {
-      state.inputText = state.inputText + action.payload
+      state.inputText = state.inputText + action.payload;
     },
     updateInputText(state, action) {
-      state.inputText = action.payload
+      state.inputText = action.payload;
+      nextStrokes(action.payload.newText, action.payload.textIndex, state)
     },
     shift(state) {
       state.shift = true;
@@ -42,13 +44,18 @@ const keyboardSlice = createSlice({
       state.capslock = false;
     },
     keyClicked(state, action) {
-
-
-      state.clicked[action.payload] = true;
-
+      let key = action.payload;
+      if (key.length === 1) {
+        key = key.toLowerCase();
+      }
+      state.clicked[key] = true;
     },
     keyReleased(state, action) {
-      state.clicked[action.payload] = false;
+      let key = action.payload;
+      if (key.length === 1) {
+        key = key.toLowerCase();
+      }
+      state.clicked[key] = false;
     },
     capslockToggle(state) {
       state.capslock = !state.capslock;
@@ -60,14 +67,14 @@ const keyboardSlice = createSlice({
       state.shift = false;
       state.clicked[SHIFT] = false;
     },
-    shouldDeadOn(state, action) {
-      state.shouldDead = action.payload;
-      state.shouldBeClicked[DEAD] = true;
+    shouldAcuteOn(state, action) {
+      state.shouldAcute = action.payload;
+      state.shouldBeClicked['Semicolon'] = true;
     },
-    shouldDeadOff(state) {
-      state.shouldDead = false;
-      state.shouldBeClicked[DEAD] = false;
-      console.log(state.shouldBeClicked[DEAD]);
+    shouldAcuteOff(state) {
+      state.shouldAcute = false;
+      state.shouldBeClicked['Semicolon'] = false;
+
     },
     shouldShiftOn(state) {
       state.shouldShift = true;
@@ -75,25 +82,25 @@ const keyboardSlice = createSlice({
     shouldShiftOff(state) {
       state.shouldShift = false;
     },
-    shouldShiftDeadOn(state, action) {
+    shouldDiaeresisOn(state, action) {
       state.shouldBeClicked[SHIFT] = true;
-      state.shouldBeClicked[DEAD] = true;
-      state.shouldShiftDead = action.payload;
+      state.shouldBeClicked['Semicolon'] = true;
+      state.shouldDiaeresis = action.payload;
     },
-    shouldShiftDeadOff(state) {
-      state.shouldShiftDead = false;
+    shouldDiaeresisOff(state) {
+      state.shouldDiaeresis = false;
     },
     keyToBeClicked(state, action) {
       state.shouldBeClicked[action.payload] = true;
     },
 
-    shouldShiftWDeadOn(state, action) {
+    shouldDiaeresisWithAcuteOn(state, action) {
       state.shouldBeClicked[SHIFT] = true;
-      state.shouldBeClicked["w"] = true;
-      state.shouldShiftDead = action.payload;
+      state.shouldBeClicked['KeyW'] = true;
+      state.shouldDiaeresisWithAcute = action.payload;
     },
-    shouldShiftWDeadOff(state) {
-      state.shouldShiftWDead = false;
+    shouldDiaeresisWithAcuteOff(state) {
+      state.shouldDiaeresisWithAcute = false;
     },
     clearShouldBeClicked(state) {
       state.shouldBeClicked = { ...strokes };

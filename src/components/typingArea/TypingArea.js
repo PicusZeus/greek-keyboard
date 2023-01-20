@@ -7,6 +7,8 @@ import {
   keyboard_eng_map_cons,
   keyboard_eng_map_diacr,
   keyboard_eng_map_vow,
+  keyboard_greek_to_latin,
+  altNonLetterKeys,
 } from "../../assets/KeyboardGrMap";
 import { texts } from "../../assets/TextsToType";
 import { Fragment } from "react";
@@ -30,17 +32,24 @@ const TypingArea = (props) => {
 
   const [composingElement, composingElementSetter] = useState(null);
 
+
   const dispatch = useDispatch();
 
   const language = useSelector((state) => state.language);
 
   const inputText = useSelector((state) => state.inputText);
 
-  const letterAfterDead = useSelector((state) => state.shouldDead);
+  const letterToGetAccent = useSelector((state) => state.shouldAcute);
 
-  const letterAfterShiftDead = useSelector((state) => state.shouldShiftDead);
+  const letterToGetDiaeresis = useSelector((state) => state.shouldDiaeresis);
 
-  const letterAfterShiftWDead = useSelector((state) => state.shouldShiftWDead);
+  const letterToGetDiaeresisWithAcute = useSelector(
+    (state) => state.shouldDiaeresisWithAcute
+  );
+  const keyboard_eng_map = {
+    ...keyboard_eng_map_vow,
+    ...keyboard_eng_map_cons,
+  };
 
   useEffect(() => {
     const element = ref.current;
@@ -83,16 +92,16 @@ const TypingArea = (props) => {
       const charStripped = awaitedChar
         .replace(ACUTE, "")
         .replace(DIAERESIS, "");
-      dispatch(keyboardActions.shouldShiftWDeadOn(charStripped));
+      dispatch(keyboardActions.shouldDiaeresisWithAcuteOn(charStripped));
     } else if (awaitedChar.includes(ACUTE)) {
       const charStripped = awaitedChar.replace(ACUTE, "");
       dispatch(keyboardActions.keyToBeClicked(DEAD));
-      dispatch(keyboardActions.shouldDeadOn(charStripped));
+      dispatch(keyboardActions.shouldAcuteOn(charStripped));
     } else if (awaitedChar.includes(DIAERESIS)) {
       const charStripped = awaitedChar.replace(DIAERESIS, "");
       dispatch(keyboardActions.keyToBeClicked(DEAD));
       dispatch(keyboardActions.shouldShiftOn());
-      dispatch(keyboardActions.shouldShiftDeadOn(charStripped));
+      dispatch(keyboardActions.shouldDiaeresisOn(charStripped));
     }
   };
 
@@ -109,129 +118,89 @@ const TypingArea = (props) => {
       singleCharAwaited(unicodeChar);
     }
   };
-  const keyboard_eng_map = {
-    ...keyboard_eng_map_vow,
-    ...keyboard_eng_map_cons,
-  };
-
-  const inputGreekSetter = (value, char, selstart) => {
+  const inputGreekSetter = (value, char, selStart) => {
     let newChar = char;
-    if (
-      typeof char === "string" &&
-      char.toLowerCase() in { ...keyboard_eng_map, ...keyboard_eng_map_diacr }
-    ) {
-      if (isComposing) {
-        if (char.toLowerCase() in keyboard_eng_map_vow) {
-          if (char.toLowerCase() !== char) {
-            newChar = keyboard_eng_map_vow[char.toLowerCase()][0].toUpperCase();
-          } else {
-            newChar = keyboard_eng_map_vow[char][0];
-          }
-          newChar = (newChar + composingElement[0]).normalize("NFC");
-          isComposingSetter(false);
 
-          // newValue = value.slice(0, -1) + newChar;
+    if (isComposing) {
+      isComposingSetter(false);
+      if (char.toLowerCase() in keyboard_eng_map_vow) {
+        if (char.toLowerCase() !== char) {
+          newChar = keyboard_eng_map_vow[char.toLowerCase()].toUpperCase();
         } else {
-          newChar = composingElement[1];
-          isComposingSetter(false);
-          // newValue = value.slice(0, -1) + detachedDiacritic;
+          newChar = keyboard_eng_map_vow[char];
         }
+        newChar = (newChar + composingElement[0]).normalize("NFC");
       } else if (char in keyboard_eng_map_diacr) {
-        composingElementSetter(keyboard_eng_map_diacr[char]);
         isComposingSetter(true);
-        newChar = "";
-        // newValue = value.slice(0, -1);
-      } else if (char in keyboard_eng_map) {
-        newChar = keyboard_eng_map[char][0];
-      } else if (char.toLowerCase() in keyboard_eng_map) {
-        newChar = keyboard_eng_map[char.toLowerCase()][0].toUpperCase();
-
-        // newValue = value.slice(1, -1) + upperCaseChar;
+        composingElementSetter(keyboard_eng_map_diacr[char]);
+        newChar = composingElement[1];
+      } else if (char in keyboard_eng_map_cons) {
+        newChar = composingElement[1] + keyboard_eng_map_cons[char];
       }
-
-
-      const textBefore = value.slice(0, selstart - 1);
-      const textAfter = value.slice(selstart);
-      const newValue = [textBefore, newChar, textAfter].join("");
-
-      dispatch(keyboardActions.updateInputText(newValue));
-
-    } else {
-      dispatch(keyboardActions.updateInputText(value));
+    } else if (char in keyboard_eng_map_diacr) {
+      composingElementSetter(keyboard_eng_map_diacr[char]);
+      isComposingSetter(true);
+      newChar = "";
+    } else if (char in keyboard_eng_map) {
+      newChar = keyboard_eng_map[char];
+    } else if (char.toLowerCase() in keyboard_eng_map) {
+      newChar = keyboard_eng_map[char.toLowerCase()].toUpperCase();
     }
+    const textBefore = value.slice(0, selStart - 1);
+    const textAfter = value.slice(selStart);
+    const newValue = [textBefore, newChar, textAfter].join("");
+
+    dispatch(keyboardActions.updateInputText({newText: newValue, textIndex: 0}));
 
     dispatch(keyboardActions.clearShouldBeClicked());
   };
 
-  const inputTextHandler = (event, value) => {
-
+  const inputTextHandler = (event) => {
+    const value = event.target.value;
     const selectionStart = event.target.selectionStart;
     selectionStartSetter(selectionStart);
-    console.log('onChange')
+
     let char = event.nativeEvent.data;
     const re = new RegExp("[a-zA-Z|;:]");
-    if (language === "gr" && re.exec(char)) {
+
+    if (language === "gr" && re.exec(char) && char !== null) {
+      console.log("true", char);
       inputGreekSetter(value, char, selectionStart);
     } else {
       dispatch(keyboardActions.updateInputText(value));
     }
   };
-  let inputChar = null;
+
   const keyDownHandler = (event) => {
-    console.log('DOWN', event.altKey, event.key)
-    if (event.altKey && event.key === 'Shift') {
-      dispatch(keyboardActions.keyClicked('Alt'))
-      dispatch(keyboardActions.keyClicked('Shift'))
-      dispatch(keyboardActions.changeLanguage())
+    dispatch(keyboardActions.keyClicked(event.code));
+    clickedCharCodesSetter({ code: event.code, key: event.key });
+
+    if (event.altKey && event.code === "Shift") {
+      dispatch(keyboardActions.changeLanguage());
     }
-    if (event.key === TAB) {
+    if (event.code === TAB) {
       event.preventDefault();
-dispatch(keyboardActions.keyClicked(event.key));
-      const el = event.target
-      const slStart = el.selectionStart
-      const newChar = '   '
+      const el = event.target;
+      const slStart = el.selectionStart;
+      const newChar = "   ";
       const textBefore = el.value.slice(0, slStart);
       const textAfter = el.value.slice(slStart);
-      console.log(textBefore, textAfter)
       const newValue = [textBefore, newChar, textAfter].join("");
-      console.log('res', newValue)
       dispatch(keyboardActions.updateInputText(newValue));
-      // dispatch(keyboardActions.updateInputText(inputText.slice(0, selectionStartGreek) + "   " + inputText.slice(selectionStartGreek)));
-
-      selectionStartSetter(slStart+3)
+      selectionStartSetter(slStart + 3);
     } else if (event.key === CAPSLOCK) {
       dispatch(keyboardActions.capslockToggle());
-      dispatch(keyboardActions.keyClicked(event.key));
     } else if (event.key === SHIFT) {
       dispatch(keyboardActions.shiftOn());
-      dispatch(keyboardActions.keyClicked(event.key));
-    } else if (event.keyCode === 32) {
-      dispatch(keyboardActions.keyClicked(SPACE));
-    } else {
-        dispatch(keyboardActions.keyClicked(event.key))
     }
   };
 
   const keyUpHandler = (event) => {
-    if (event.keyCode === 186) {
-      // acute clicked
-      singleCharAwaited(letterAfterDead);
-      dispatch(keyboardActions.shouldDeadOff());
-    } else if (event.keyCode === 186 && event.shiftKey) {
-      singleCharAwaited(letterAfterShiftDead);
-      dispatch(keyboardActions.shouldShiftDeadOff());
-    } else if (event.keyCode === 87 && event.shiftKey) {
-      singleCharAwaited(letterAfterShiftWDead);
-      dispatch(keyboardActions.shouldShiftWDeadOff());
-    } else if (event.keyCode === 16) {
+    dispatch(keyboardActions.keyReleased(event.code));
+
+    if (event.key === SHIFT) {
       dispatch(keyboardActions.shiftOff());
-      dispatch(keyboardActions.keyClicked(event.key));
-    } else if (event.keyCode === 32) {
-      dispatch(keyboardActions.keyReleased(SPACE));
-    } else if (event.key in keyboard_gr_map) {
-      dispatch(keyboardActions.keyReleased(keyboard_gr_map[event.key][0]));
-    } else {
-      dispatch(keyboardActions.keyReleased(event.key));
+      dispatch(keyboardActions.keyReleased("CapsLock"));
     }
   };
 
@@ -243,8 +212,7 @@ dispatch(keyboardActions.keyClicked(event.key));
       dispatch(keyboardActions.capslockOff());
     }
   };
-  const handlerInput = (event) => {
-  };
+  const handlerInput = (event) => {};
   return (
     <Fragment>
       <textarea
@@ -259,7 +227,7 @@ dispatch(keyboardActions.keyClicked(event.key));
         onKeyDownCapture={(event) => keyDownHandler(event)}
         onKeyUpCapture={keyUpHandler}
         onClick={prepareTextArea}
-        onInput={(event) => handlerInput(event)}
+
         ref={ref}
       />
 
