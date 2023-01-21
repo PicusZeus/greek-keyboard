@@ -8,10 +8,11 @@ import {
   keyboard_eng_map_diacr,
   keyboard_eng_map_vow,
   keyboard_greek_to_latin,
-  altNonLetterKeys,
+  altKeys,
 } from "../../assets/KeyboardGrMap";
 import { texts } from "../../assets/TextsToType";
 import { Fragment } from "react";
+import EvaluationMessage from "../evaluation/EvaluationMessage";
 
 import {
   SHIFT,
@@ -152,28 +153,30 @@ const TypingArea = (props) => {
 
     dispatch(keyboardActions.updateInputText({newText: newValue, textIndex: 0}));
 
-    dispatch(keyboardActions.clearShouldBeClicked());
   };
 
   const inputTextHandler = (event) => {
     const value = event.target.value;
+
+
     const selectionStart = event.target.selectionStart;
     selectionStartSetter(selectionStart);
 
-    let char = event.nativeEvent.data;
+    const char = event.nativeEvent.data;
+
     const re = new RegExp("[a-zA-Z|;:]");
 
     if (language === "gr" && re.exec(char) && char !== null) {
-      console.log("true", char);
+
       inputGreekSetter(value, char, selectionStart);
     } else {
-      dispatch(keyboardActions.updateInputText(value));
+
+      dispatch(keyboardActions.updateInputText({newText: value, textIndex: 0}));
     }
   };
 
   const keyDownHandler = (event) => {
     dispatch(keyboardActions.keyClicked(event.code));
-    clickedCharCodesSetter({ code: event.code, key: event.key });
 
     if (event.altKey && event.code === "Shift") {
       dispatch(keyboardActions.changeLanguage());
@@ -212,7 +215,9 @@ const TypingArea = (props) => {
       dispatch(keyboardActions.capslockOff());
     }
   };
-  const handlerInput = (event) => {};
+  const resetTextHandler = () => {
+    dispatch(keyboardActions.updateInputText(''))
+  };
   return (
     <Fragment>
       <textarea
@@ -231,11 +236,11 @@ const TypingArea = (props) => {
         ref={ref}
       />
 
-      {/*<EvaluatedText*/}
-      {/*  value={inputText}*/}
-      {/*  difficulty={props.difficulty}*/}
-      {/*  resetText={resetTextHandler}*/}
-      {/*/>*/}
+      <EvaluationMessage
+        value={inputText}
+        difficulty={0}
+        resetText={resetTextHandler}
+      />
     </Fragment>
   );
 };

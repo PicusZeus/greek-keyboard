@@ -4,7 +4,7 @@ import KeyboardKey from "../keyboardKey/KeyboardKey";
 import {useDispatch} from "react-redux";
 import {useSelector} from "react-redux";
 import {keyboardActions} from "../../store";
-import Button from "../Button/Button";
+import Button from "../UI/Button/Button";
 function Keyboard(props) {
     const dispatch = useDispatch()
     const language = useSelector(state => state.language)

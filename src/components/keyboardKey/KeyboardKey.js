@@ -5,6 +5,7 @@ const KeyboardKey = (props) => {
   const shift = useSelector((state) => state.shift);
   const capslock = useSelector((state) => state.capslock);
   const clicked = useSelector((state) => state.clicked[props.id]);
+  const shouldShift = useSelector((state) => state.shouldShift);
   const shouldBeClicked = useSelector(
     (state) => state.shouldBeClicked[props.id]
   );
@@ -69,7 +70,16 @@ const KeyboardKey = (props) => {
       } else {
         keyClasses = keyClasses.filter((cls) => cls !== classes.active);
       }
+      if (capslock) {
+        if (!shouldShift) {
+          keyClasses.push(classes.awaited)
+        }
+      } else {
+         if (shouldShift) {
+        keyClasses.push(classes.awaited)
+      }
 
+      }
       break;
     case "keyboard_tab":
       specialKey = potentialSpecialKey;
@@ -91,4 +101,4 @@ const KeyboardKey = (props) => {
   );
 };
 
-export default KeyboardKey
+export default KeyboardKey;

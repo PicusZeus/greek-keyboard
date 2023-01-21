@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Background from "../hoc/background/Background";
 import Keyboard from "../components/keyboard/Keyboard";
-import Button from "../components/Button/Button";
+import Button from "../components/UI/Button/Button";
 import TextHolder from "../components/UI/textHolder/TextHolder";
 import TypingArea from "../components/typingArea/TypingArea";
 import { texts } from "../assets/TextsToType";

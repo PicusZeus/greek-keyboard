@@ -109,7 +109,11 @@ export const keyboard_gr_map = {
   Space: ["Space"],
 };
 
-export const altNonLetterKeys = {
+export const altGreekKeys = {
+  ":": ["KeyQ", "Shift"]
+}
+
+export const altKeys = {
   "?": ["Slash", "Shift"],
   ">": ["Period", "Shift"],
   "<": ["Colon", "Shift"],
@@ -119,7 +123,7 @@ export const altNonLetterKeys = {
   ")": ["Digit0", "Shift"],
   "(": ["Digit9", "Shift"],
   "*": ["Digit8", "Shift"],
-  ":": ["KeyQ", "Shift"],
+  ":": ["Semicolon", "Shift"],
   "{": ["BracketLeft", "Shift"],
   "}": ["BracketRight", "Shift"],
   "|": ["Backslash", "Shift"],
@@ -132,6 +136,10 @@ export const altNonLetterKeys = {
   "&": ["Digit7", "Shift"],
   "^": ["Digit6", "Shift"],
   ż: ["KeyZ", "Alt"],
+  ź: ['KeyX', "Alt"],
+  ć: ['KeyC', 'Alt'],
+  ą: ['KeyA', 'Alt'],
+  ę: ['KeyE', 'Alt']
 };
 
 export const keyboard_eng_map_diacr = {
@@ -200,4 +208,61 @@ export const keyboard_greek_to_latin = {
   β: "KeyB",
   ν: "KeyN",
   μ: "KeyM",
+};
+
+export const keyboard_latin_to_latin = {
+  w: "KeyW",
+  e: "KeyE",
+  r: "KeyR",
+  t: "KeyT",
+  y: "KeyY",
+  u: "KeyU",
+  i: "KeyI",
+  o: "KeyO",
+  p: "KeyP",
+  a: "KeyA",
+  s: "KeyS",
+  d: "KeyD",
+  f: "KeyF",
+  g: "KeyG",
+  h: "KeyH",
+  j: "KeyJ",
+  k: "KeyK",
+  l: "KeyL",
+  z: "KeyZ",
+  x: "KeyX",
+  c: "KeyC",
+  v: "KeyV",
+  b: "KeyB",
+  n: "KeyN",
+  m: "KeyM",
+};
+
+export const nonLetterKeysGreek = {
+  ";": "KeyQ"
+}
+export const nonLetterKeys = {
+  "/": "Slash",
+  ".": "Period",
+  ",": "Coma",
+  '': "Quotation",
+  "=": "Equal",
+  "-": "Minus",
+  "0": "Digit0",
+  "9": "Digit9",
+  "8": "Digit8",
+  ";": "Semicolon",
+  "[": "BracketLeft",
+  "]": "BracketRight",
+  "\\": "Backslash",
+  "`": "Backquote",
+  "1": "Digit1",
+  "2": "Digit2",
+  "3": "Digit3",
+  "4": "Digit4",
+  "5": "Digit5",
+  "7": "Digit7",
+  "6": "Digit6",
+
+
 };

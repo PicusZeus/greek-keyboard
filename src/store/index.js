@@ -1,7 +1,7 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit";
 import { strokes } from "../assets/Strokes";
 import { SHIFT } from "../assets/Variables";
-import {nextStrokes} from "./actionNextStrokes";
+import { nextStrokes } from "./actionNextStrokes";
 const initialState = {
   inputText: "",
   language: "gr",
@@ -13,7 +13,7 @@ const initialState = {
   shouldAcute: false,
   shouldDiaeresis: false,
   shouldDiaeresisWithAcute: false,
-  nextToBeClickedComposing: false
+  nextToBeClickedComposing: false,
 };
 
 const keyboardSlice = createSlice({
@@ -30,9 +30,27 @@ const keyboardSlice = createSlice({
     addToInputText(state, action) {
       state.inputText = state.inputText + action.payload;
     },
+
+    clearInputText(state) {
+      state.inputText = ''
+    },
     updateInputText(state, action) {
-      state.inputText = action.payload;
-      nextStrokes(action.payload.newText, action.payload.textIndex, state)
+      if (!action.payload.newText) {
+        state.inputText = ''
+        return
+      }
+
+      state.inputText = action.payload.newText;
+
+      const [sdb, shouldShift, nextToBeClickedComposing] = nextStrokes(
+        action.payload.newText,
+        action.payload.textIndex,
+        state.language,
+        state.nextToBeClickedComposing
+      );
+      state.shouldBeClicked = sdb;
+      state.shouldShift = shouldShift;
+      state.nextToBeClickedComposing = nextToBeClickedComposing;
     },
     shift(state) {
       state.shift = true;
@@ -69,12 +87,11 @@ const keyboardSlice = createSlice({
     },
     shouldAcuteOn(state, action) {
       state.shouldAcute = action.payload;
-      state.shouldBeClicked['Semicolon'] = true;
+      state.shouldBeClicked["Semicolon"] = true;
     },
     shouldAcuteOff(state) {
       state.shouldAcute = false;
-      state.shouldBeClicked['Semicolon'] = false;
-
+      state.shouldBeClicked["Semicolon"] = false;
     },
     shouldShiftOn(state) {
       state.shouldShift = true;
@@ -84,7 +101,7 @@ const keyboardSlice = createSlice({
     },
     shouldDiaeresisOn(state, action) {
       state.shouldBeClicked[SHIFT] = true;
-      state.shouldBeClicked['Semicolon'] = true;
+      state.shouldBeClicked["Semicolon"] = true;
       state.shouldDiaeresis = action.payload;
     },
     shouldDiaeresisOff(state) {
@@ -96,7 +113,7 @@ const keyboardSlice = createSlice({
 
     shouldDiaeresisWithAcuteOn(state, action) {
       state.shouldBeClicked[SHIFT] = true;
-      state.shouldBeClicked['KeyW'] = true;
+      state.shouldBeClicked["KeyW"] = true;
       state.shouldDiaeresisWithAcute = action.payload;
     },
     shouldDiaeresisWithAcuteOff(state) {

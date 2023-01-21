@@ -1,0 +1,24 @@
+.Main {
+  width: 1200px;
+  border: 1px solid gray;
+  overflow-wrap: break-word;
+  margin: 2rem auto;
+  height: 10rem;
+  display: flex;
+}
+
+.EvaluatedText {
+  width: 80%;
+  border-right: solid 2px;
+}
+
+.NumberOfErrors {
+  text-align: center;
+  width: 20%;
+  padding: 3rem;
+  font-size: 3rem;
+}
+
+.Error {
+  color: red;
+}
