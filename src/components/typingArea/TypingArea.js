@@ -7,8 +7,6 @@ import {
   keyboard_eng_map_cons,
   keyboard_eng_map_diacr,
   keyboard_eng_map_vow,
-  keyboard_greek_to_latin,
-  altKeys,
 } from "../../assets/KeyboardGrMap";
 import { texts } from "../../assets/TextsToType";
 import { Fragment } from "react";
@@ -40,13 +38,6 @@ const TypingArea = (props) => {
 
   const inputText = useSelector((state) => state.inputText);
 
-  const letterToGetAccent = useSelector((state) => state.shouldAcute);
-
-  const letterToGetDiaeresis = useSelector((state) => state.shouldDiaeresis);
-
-  const letterToGetDiaeresisWithAcute = useSelector(
-    (state) => state.shouldDiaeresisWithAcute
-  );
   const keyboard_eng_map = {
     ...keyboard_eng_map_vow,
     ...keyboard_eng_map_cons,
@@ -151,11 +142,13 @@ const TypingArea = (props) => {
     const textAfter = value.slice(selStart);
     const newValue = [textBefore, newChar, textAfter].join("");
 
-    dispatch(keyboardActions.updateInputText({newText: newValue, textIndex: 0}));
+    dispatch(keyboardActions.updateInputText({newText: newValue}));
 
   };
 
   const inputTextHandler = (event) => {
+    console.log(event)
+
     const value = event.target.value;
 
 
@@ -164,21 +157,21 @@ const TypingArea = (props) => {
 
     const char = event.nativeEvent.data;
 
-    const re = new RegExp("[a-zA-Z|;:]");
+    const re = new RegExp("[a-zA-Z|;:≤≥]");
 
     if (language === "gr" && re.exec(char) && char !== null) {
 
       inputGreekSetter(value, char, selectionStart);
     } else {
 
-      dispatch(keyboardActions.updateInputText({newText: value, textIndex: 0}));
+      dispatch(keyboardActions.updateInputText({newText: value}));
     }
   };
 
   const keyDownHandler = (event) => {
+    dispatch(keyboardActions.unsetError())
     dispatch(keyboardActions.keyClicked(event.code));
-
-    if (event.altKey && event.code === "Shift") {
+    if (event.altKey && event.code === "ShiftLeft") {
       dispatch(keyboardActions.changeLanguage());
     }
     if (event.code === TAB) {
@@ -215,9 +208,7 @@ const TypingArea = (props) => {
       dispatch(keyboardActions.capslockOff());
     }
   };
-  const resetTextHandler = () => {
-    dispatch(keyboardActions.updateInputText(''))
-  };
+
   return (
     <Fragment>
       <textarea
@@ -237,9 +228,7 @@ const TypingArea = (props) => {
       />
 
       <EvaluationMessage
-        value={inputText}
-        difficulty={0}
-        resetText={resetTextHandler}
+
       />
     </Fragment>
   );

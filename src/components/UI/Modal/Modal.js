@@ -1,10 +1,12 @@
-import React from 'react';
-import classes from './Modal.module.css'
-import Backdrop from '../Backdrop/Backdrop';
+import React from "react";
+import classes from "./Modal.module.css";
+import Backdrop from "../Backdrop/Backdrop";
 import Button from "../Button/Button";
+import EvaluatedText from "../../evaluation/EvaluationMessage";
+import {keyboardActions} from "../../../store";
 
-const modal = props => {
 
+const modal = (props) => {
 
   return (
     <React.Fragment>
@@ -12,12 +14,18 @@ const modal = props => {
       <div
         className={classes.Modal}
         style={{
-          transform: props.show ? 'translateY(0)' : 'translateY(-100vh)',
-          opacity: props.show ? '1' : '0'
+          transform: props.show ? "translateY(0)" : "translateY(-100vh)",
+          opacity: props.show ? "1" : "0",
         }}
       >
         {props.children}
-          <button onClick={props.modalClosed}>OK</button>
+        <button autoFocus onClick={props.modalClosed}>
+          OK
+        </button>
+        <EvaluatedText
+
+
+        />
       </div>
     </React.Fragment>
   );

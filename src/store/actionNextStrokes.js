@@ -1,22 +1,28 @@
 import { texts } from "../assets/TextsToType";
 import { ACUTE, DIAERESIS, SPACE } from "../assets/Variables";
-import { keyboardActions } from "./index";
 import { strokes } from "../assets/Strokes";
 import {
   altGreekKeys,
-  altKeys, keyboard_eng_map_vow,
+  altKeys,
   keyboard_greek_to_latin,
   nonLetterKeys,
   nonLetterKeysGreek,
 } from "../assets/KeyboardGrMap";
-let counter = 1
 export const nextStrokes = (newInputText, textIndex, language, nextTBCC) => {
-
+  console.log(newInputText)
   const shouldBeClicked = { ...strokes };
+
 
   let shouldShift = false;
   let nextToBeClickedComposing = nextTBCC;
-  const index = newInputText.length;
+  let index
+  if (newInputText) {
+    index = newInputText.length;
+  } else {
+    index = 0
+  }
+
+
   const exemplar = texts[textIndex];
   if (index >= exemplar.length) {
     return [shouldBeClicked, shouldShift, nextToBeClickedComposing];
@@ -25,9 +31,8 @@ export const nextStrokes = (newInputText, textIndex, language, nextTBCC) => {
   let awaitedChar = exemplar[index];
   let unicodeChar = awaitedChar.normalize("NFD");
 
+
   if (unicodeChar.length > 1 && !nextTBCC) {
-    counter ++
-    console.log(counter, 'combined')
     return combinedCharAwaited(
       unicodeChar,
       shouldBeClicked,
@@ -37,8 +42,6 @@ export const nextStrokes = (newInputText, textIndex, language, nextTBCC) => {
   } else {
 
 
-    counter++
-    console.log(counter, 'single')
     return singleCharAwaited(
       unicodeChar,
       shouldBeClicked,
@@ -80,8 +83,10 @@ const singleCharAwaited = (
   language,
   nextToBeClickedComposing
 ) => {
+  
   const shouldBeClicked = { ...sdb };
   let shouldShift = false;
+  let shouldAlt = false;
   if (nextToBeClickedComposing) {
     if (nextToBeClickedComposing in keyboard_greek_to_latin) {
       nextToBeClickedComposing = keyboard_greek_to_latin[nextToBeClickedComposing]
@@ -98,10 +103,12 @@ const singleCharAwaited = (
       shouldShift = true;
     }
   } else if (language === "gr" && unicodeChar in altGreekKeys) {
+
     shouldShift = true;
     shouldBeClicked[altGreekKeys[unicodeChar][0]] = true;
     shouldBeClicked[altGreekKeys[unicodeChar][1]] = true;
   } else if (unicodeChar in altKeys) {
+    console.log(unicodeChar, 'Tutaj')
     shouldBeClicked[altKeys[unicodeChar][1]] = true;
     shouldBeClicked[altKeys[unicodeChar][0]] = true;
   } else if (unicodeChar in nonLetterKeysGreek && language === "gr") {

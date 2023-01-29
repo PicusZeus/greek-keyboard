@@ -5,6 +5,7 @@ import {useDispatch} from "react-redux";
 import {useSelector} from "react-redux";
 import {keyboardActions} from "../../store";
 import Button from "../UI/Button/Button";
+import {Fragment} from "react";
 function Keyboard(props) {
     const dispatch = useDispatch()
     const language = useSelector(state => state.language)
@@ -26,12 +27,20 @@ function Keyboard(props) {
   ));
 
   return (
-      <div className={classes.Keyboard}>
-        <div className={classes.Keyboard__keys}>
+
+      <div className={classes.keyboard}>
+        <div className={classes.keyboard__keys}>
           {keyCaps}
+            <div className={classes.button__language}>
+                <Button onClick={changeLanguageHandler}>{language}</Button>
+            </div>
         </div>
-          <Button onClick={changeLanguageHandler} label={language}></Button>
+
       </div>
+
+
+
+
   )
 }
 

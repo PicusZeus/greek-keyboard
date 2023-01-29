@@ -14,12 +14,26 @@ const initialState = {
   shouldDiaeresis: false,
   shouldDiaeresisWithAcute: false,
   nextToBeClickedComposing: false,
+  textIndex: 1,
+  error: false,
+
 };
 
 const keyboardSlice = createSlice({
   name: "keyboard",
   initialState: initialState,
   reducers: {
+
+
+    changeDifficulty(state, action) {
+      state.textIndex = action.payload
+    },
+    setError(state) {
+      state.error = true
+    },
+    unsetError(state) {
+      state.error = false
+    },
     changeLanguage(state) {
       if (state.language === "gr") {
         state.language = "pl";
@@ -35,19 +49,30 @@ const keyboardSlice = createSlice({
       state.inputText = ''
     },
     updateInputText(state, action) {
+
+      let result
+     // [sdb, shouldShift, nextToBeClickedComposing]
       if (!action.payload.newText) {
         state.inputText = ''
-        return
-      }
-
-      state.inputText = action.payload.newText;
-
-      const [sdb, shouldShift, nextToBeClickedComposing] = nextStrokes(
-        action.payload.newText,
-        action.payload.textIndex,
+       result = nextStrokes(
+        '',
+        state.textIndex,
         state.language,
         state.nextToBeClickedComposing
       );
+      } else {
+        state.inputText = action.payload.newText;
+
+      result = nextStrokes(
+        action.payload.newText,
+        state.textIndex,
+        state.language,
+        state.nextToBeClickedComposing
+      );
+      }
+      const [sdb, shouldShift, nextToBeClickedComposing] = result
+
+
       state.shouldBeClicked = sdb;
       state.shouldShift = shouldShift;
       state.nextToBeClickedComposing = nextToBeClickedComposing;
@@ -122,6 +147,9 @@ const keyboardSlice = createSlice({
     clearShouldBeClicked(state) {
       state.shouldBeClicked = { ...strokes };
     },
+    clearClicked(state) {
+      state.clicked = { ...strokes }
+    }
   },
 });
 

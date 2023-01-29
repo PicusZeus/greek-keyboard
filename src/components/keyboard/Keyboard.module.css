@@ -1,31 +1,42 @@
-.Keyboard {
-  left: 0;
-  top: 40px;
-  width: 100%;
+.keyboard {
+  /*width: 90%;*/
   padding: 5px 0;
   background: darkgray;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
   user-select: none;
   transition: top 0.4s;
-}
-.Keyboard__hidden {
-  top: -100%;
-}
-.Keyboard__keys {
-  text-align: center;
   display: flex;
   flex-direction: column;
+  align-items: center;
+
 }
-.Keyboard__keys div {
-  display: inline-block;
-  align-items: stretch;
+.keyboard__hidden {
+  top: -100%;
+}
+.keyboard__keys {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.keyboard__keys div {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   max-width: 1200px;
   margin: auto;
 }
 
+.button__language {
+  position: absolute;
+  bottom: 0;
+  right: 40%;
+}
+
 @media (min-width: 1300px) {
-  .Keyboard__keys div {
+  .keyboard__keys div {
     width: 80%;
   }
 }

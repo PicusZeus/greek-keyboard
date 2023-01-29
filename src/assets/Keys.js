@@ -72,7 +72,8 @@ export const keys = [
   ],
   // fifth line
   [
-    { latin: null, lower: "Alt", upper: null, id: "Alt" },
+
     { latin: null, lower: "space_bar", upper: null, id: "Space" },
+      { latin: null, lower: "Alt", upper: null, id: "Alt" }
   ],
 ];

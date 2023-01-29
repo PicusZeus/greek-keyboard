@@ -1,41 +1,57 @@
-import { useState } from "react";
 import Background from "../hoc/background/Background";
 import Keyboard from "../components/keyboard/Keyboard";
 import Button from "../components/UI/Button/Button";
 import TextHolder from "../components/UI/textHolder/TextHolder";
 import TypingArea from "../components/typingArea/TypingArea";
-import { texts } from "../assets/TextsToType";
-// import typingArea from "./typingArea/typingArea";
-// import button from "../../../components/button/button";
-// import { texts } from "../../../assets/Texts_to_type";
 import classes from "./GreekKeyboard.module.css";
+import { texts } from "../assets/TextsToType";
+import { keyboardActions } from "../store";
+import { useDispatch, useSelector } from "react-redux";
 
-// import TextHolder from "../../../components/UI/TextHolder/TextHolder";
+const difficulties = {
+  łatwy: 1,
+  średni: 2,
+  trudny: 3,
+};
 
-const GreekKeyboard = (props) => {
-  const [textDifficulty, textDifficultySetter] = useState(0);
-
+const GreekKeyboard = () => {
+  const textDifficultyIndex = useSelector((state) => state.textIndex);
+  const dispatch = useDispatch();
   const chooseText = (nr) => {
-    textDifficultySetter(nr);
+    dispatch(keyboardActions.changeDifficulty(nr));
   };
+
+  const buttons = Object.keys(difficulties).map((difficulty) => {
+    const clicked = difficulties[difficulty] === textDifficultyIndex;
+    return (
+      <Button key={difficulties[difficulty]}
+        clicked={clicked}
+        onClick={() => chooseText(difficulties[difficulty])}
+      >
+        {difficulty}
+      </Button>
+    );
+  });
 
   return (
     <Background>
-      <div>
-        <h2>
+      <div className={classes.mobileDisplay}>
+        <div className={classes.introduction}>
+          Aby poćwiczyć pisanie na klawiaturze, otwórz stronę na komputerze
+        </div>
+        <div className={classes.animation}>{classes.animation}</div>
+      </div>
+      <div className={classes.desktopDisplay}>
+        <div className={classes.introduction}>
           Wybierz poziom trudności tekstu do ćwiczenia pisania na klawiaturze
-        </h2>
-        <div>
-          <Button label={"łatwy"} />
-          <Button label={"średni"} />
-          <Button label={"trudny"} />
         </div>
+        <div className={classes.buttons}>{buttons}</div>
         <Keyboard />
-        <div>
-          <TextHolder text={texts[textDifficulty]} />
 
-          <TypingArea difficulty={textDifficulty} />
-        </div>
+          <TextHolder text={texts[textDifficultyIndex]} />
+
+          <TypingArea difficulty={textDifficultyIndex} />
+
       </div>
     </Background>
   );

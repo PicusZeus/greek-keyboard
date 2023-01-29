@@ -110,8 +110,9 @@ export const keyboard_gr_map = {
 };
 
 export const altGreekKeys = {
-  ":": ["KeyQ", "Shift"]
-}
+  ":": ["KeyQ", "Shift"],
+
+};
 
 export const altKeys = {
   "?": ["Slash", "Shift"],
@@ -119,7 +120,7 @@ export const altKeys = {
   "<": ["Colon", "Shift"],
   '"': ["Quotation", "Shift"],
   "+": ["Equal", "Shift"],
-  "_": ["Minus", "Shift"],
+  _: ["Minus", "Shift"],
   ")": ["Digit0", "Shift"],
   "(": ["Digit9", "Shift"],
   "*": ["Digit8", "Shift"],
@@ -136,10 +137,12 @@ export const altKeys = {
   "&": ["Digit7", "Shift"],
   "^": ["Digit6", "Shift"],
   ż: ["KeyZ", "Alt"],
-  ź: ['KeyX', "Alt"],
-  ć: ['KeyC', 'Alt'],
-  ą: ['KeyA', 'Alt'],
-  ę: ['KeyE', 'Alt']
+  ź: ["KeyX", "Alt"],
+  ć: ["KeyC", "Alt"],
+  ą: ["KeyA", "Alt"],
+  ę: ["KeyE", "Alt"],
+  "«": ["Coma", "Alt"],
+  "»": ["Period", "Alt"],
 };
 
 export const keyboard_eng_map_diacr = {
@@ -160,6 +163,8 @@ export const keyboard_eng_map_vow = {
 export const keyboard_eng_map_cons = {
   Q: ":",
   q: ";",
+  "≤": "«",
+  "≥": "»",
   w: "ς",
   r: "ρ",
   t: "τ",
@@ -239,30 +244,28 @@ export const keyboard_latin_to_latin = {
 };
 
 export const nonLetterKeysGreek = {
-  ";": "KeyQ"
-}
+  ";": "KeyQ",
+};
 export const nonLetterKeys = {
   "/": "Slash",
   ".": "Period",
   ",": "Coma",
-  '': "Quotation",
+  "": "Quotation",
   "=": "Equal",
   "-": "Minus",
-  "0": "Digit0",
-  "9": "Digit9",
-  "8": "Digit8",
+  0: "Digit0",
+  9: "Digit9",
+  8: "Digit8",
   ";": "Semicolon",
   "[": "BracketLeft",
   "]": "BracketRight",
   "\\": "Backslash",
   "`": "Backquote",
-  "1": "Digit1",
-  "2": "Digit2",
-  "3": "Digit3",
-  "4": "Digit4",
-  "5": "Digit5",
-  "7": "Digit7",
-  "6": "Digit6",
-
-
+  1: "Digit1",
+  2: "Digit2",
+  3: "Digit3",
+  4: "Digit4",
+  5: "Digit5",
+  7: "Digit7",
+  6: "Digit6",
 };

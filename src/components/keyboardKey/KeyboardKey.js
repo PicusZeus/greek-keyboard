@@ -9,6 +9,7 @@ const KeyboardKey = (props) => {
   const shouldBeClicked = useSelector(
     (state) => state.shouldBeClicked[props.id]
   );
+  const language = useSelector((state) => state.language)
 
   let keyClasses = [classes.KeyboardKey];
   if (clicked) {
@@ -20,16 +21,23 @@ const KeyboardKey = (props) => {
   }
 
   let char = props.lower;
+  let latinChar = props.latin;
 
   if (capslock) {
     if (shift && props.latin) {
       char = char.toLowerCase();
+      latinChar = latinChar.toLowerCase()
     } else if (props.latin) {
       char = props.upper;
+      latinChar = latinChar.toUpperCase()
     }
   } else {
     if (shift && props.upper) {
       char = props.upper;
+      if (props.latin) {
+        latinChar = latinChar.toUpperCase()
+      }
+
     }
   }
 
@@ -91,11 +99,20 @@ const KeyboardKey = (props) => {
       break;
   }
 
+  let mainCharacter = char
+  let secondaryCharacter = latinChar
+  if (language === 'pl' && props.latin) {
+    mainCharacter = latinChar
+    secondaryCharacter = char
+
+  }
+
+
   return (
     <button type="button" className={keyClasses.join(" ")}>
-      {specialKey ? specialKey : char}
+      {specialKey ? specialKey : mainCharacter}
       {!specialKey ? (
-        <span className={classes.Latin}>{props.latin}</span>
+        <span className={classes.Latin}>{secondaryCharacter}</span>
       ) : null}
     </button>
   );
