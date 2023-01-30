@@ -9,19 +9,16 @@ import {
   nonLetterKeysGreek,
 } from "../assets/KeyboardGrMap";
 export const nextStrokes = (newInputText, textIndex, language, nextTBCC) => {
-  console.log(newInputText)
   const shouldBeClicked = { ...strokes };
-
 
   let shouldShift = false;
   let nextToBeClickedComposing = nextTBCC;
-  let index
+  let index;
   if (newInputText) {
     index = newInputText.length;
   } else {
-    index = 0
+    index = 0;
   }
-
 
   const exemplar = texts[textIndex];
   if (index >= exemplar.length) {
@@ -31,7 +28,6 @@ export const nextStrokes = (newInputText, textIndex, language, nextTBCC) => {
   let awaitedChar = exemplar[index];
   let unicodeChar = awaitedChar.normalize("NFD");
 
-
   if (unicodeChar.length > 1 && !nextTBCC) {
     return combinedCharAwaited(
       unicodeChar,
@@ -40,8 +36,6 @@ export const nextStrokes = (newInputText, textIndex, language, nextTBCC) => {
       nextToBeClickedComposing
     );
   } else {
-
-
     return singleCharAwaited(
       unicodeChar,
       shouldBeClicked,
@@ -61,9 +55,7 @@ const combinedCharAwaited = (unicodeChar, sdb, language, nextTBCC) => {
       .replace(ACUTE, "")
       .replace(DIAERESIS, "")
       .normalize("NFD");
-
   }
-
 
   if (unicodeChar.includes(ACUTE) && unicodeChar.includes(DIAERESIS)) {
     shouldBeClicked["keyW"] = true;
@@ -83,16 +75,16 @@ const singleCharAwaited = (
   language,
   nextToBeClickedComposing
 ) => {
-  
   const shouldBeClicked = { ...sdb };
   let shouldShift = false;
-  let shouldAlt = false;
   if (nextToBeClickedComposing) {
     if (nextToBeClickedComposing in keyboard_greek_to_latin) {
-      nextToBeClickedComposing = keyboard_greek_to_latin[nextToBeClickedComposing]
+      nextToBeClickedComposing =
+        keyboard_greek_to_latin[nextToBeClickedComposing];
     } else {
-      nextToBeClickedComposing = keyboard_greek_to_latin[nextToBeClickedComposing.toLowerCase()]
-      shouldShift = true
+      nextToBeClickedComposing =
+        keyboard_greek_to_latin[nextToBeClickedComposing.toLowerCase()];
+      shouldShift = true;
     }
     shouldBeClicked[nextToBeClickedComposing] = true;
   } else if (unicodeChar === " ") {
@@ -103,12 +95,10 @@ const singleCharAwaited = (
       shouldShift = true;
     }
   } else if (language === "gr" && unicodeChar in altGreekKeys) {
-
     shouldShift = true;
     shouldBeClicked[altGreekKeys[unicodeChar][0]] = true;
     shouldBeClicked[altGreekKeys[unicodeChar][1]] = true;
   } else if (unicodeChar in altKeys) {
-    console.log(unicodeChar, 'Tutaj')
     shouldBeClicked[altKeys[unicodeChar][1]] = true;
     shouldBeClicked[altKeys[unicodeChar][0]] = true;
   } else if (unicodeChar in nonLetterKeysGreek && language === "gr") {

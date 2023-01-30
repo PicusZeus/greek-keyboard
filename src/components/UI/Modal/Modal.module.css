@@ -1,19 +1,26 @@
-.Modal {
+.main_modal {
   position: fixed;
+  display: flex;
+  flex-flow: column;
   z-index: 500;
-  background-color: white;
   width: 70%;
-  border: 1px solid #ccc;
-  box-shadow: 1px 1px 1px black;
-  padding: 16px;
+  box-shadow: 12px 12px 24px 3px rgba(20, 14, 20, 1);
   left: 15%;
   top: 30%;
   box-sizing: border-box;
   transition: all 0.3s ease-out;
 }
 
+.button {
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 2rem;
+  font-style: italic;
+  font-weight: bolder;
+}
+
 @media (min-width: 600px) {
-  .Modal {
+  .main_modal {
     width: 500px;
     left: calc(50% - 250px);
   }

@@ -10,8 +10,6 @@ import {
 } from "../../assets/KeyboardGrMap";
 import { texts } from "../../assets/TextsToType";
 import { Fragment } from "react";
-import EvaluationMessage from "../evaluation/EvaluationMessage";
-
 import {
   SHIFT,
   SPACE,
@@ -30,7 +28,6 @@ const TypingArea = (props) => {
   const [isComposing, isComposingSetter] = useState(false);
 
   const [composingElement, composingElementSetter] = useState(null);
-
 
   const dispatch = useDispatch();
 
@@ -142,15 +139,11 @@ const TypingArea = (props) => {
     const textAfter = value.slice(selStart);
     const newValue = [textBefore, newChar, textAfter].join("");
 
-    dispatch(keyboardActions.updateInputText({newText: newValue}));
-
+    dispatch(keyboardActions.updateInputText({ newText: newValue }));
   };
 
   const inputTextHandler = (event) => {
-    console.log(event)
-
     const value = event.target.value;
-
 
     const selectionStart = event.target.selectionStart;
     selectionStartSetter(selectionStart);
@@ -160,16 +153,14 @@ const TypingArea = (props) => {
     const re = new RegExp("[a-zA-Z|;:≤≥]");
 
     if (language === "gr" && re.exec(char) && char !== null) {
-
       inputGreekSetter(value, char, selectionStart);
     } else {
-
-      dispatch(keyboardActions.updateInputText({newText: value}));
+      dispatch(keyboardActions.updateInputText({ newText: value }));
     }
   };
 
   const keyDownHandler = (event) => {
-    dispatch(keyboardActions.unsetError())
+    dispatch(keyboardActions.unsetError());
     dispatch(keyboardActions.keyClicked(event.code));
     if (event.altKey && event.code === "ShiftLeft") {
       dispatch(keyboardActions.changeLanguage());
@@ -217,18 +208,13 @@ const TypingArea = (props) => {
         cols={5}
         rows={5}
         placeholder={"Zacznij pisać tutaj"}
-        className={classes.textArea}
+        className={classes.text_area}
         value={inputText}
         onChange={(event) => inputTextHandler(event, event.target.value)}
         onKeyDownCapture={(event) => keyDownHandler(event)}
         onKeyUpCapture={keyUpHandler}
         onClick={prepareTextArea}
-
         ref={ref}
-      />
-
-      <EvaluationMessage
-
       />
     </Fragment>
   );

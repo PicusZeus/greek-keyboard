@@ -16,23 +16,24 @@ const initialState = {
   nextToBeClickedComposing: false,
   textIndex: 1,
   error: false,
-
+  showModal: false,
 };
 
 const keyboardSlice = createSlice({
   name: "keyboard",
   initialState: initialState,
   reducers: {
-
-
+    setShowModal(state, action) {
+      state.showModal = action.payload;
+    },
     changeDifficulty(state, action) {
-      state.textIndex = action.payload
+      state.textIndex = action.payload;
     },
     setError(state) {
-      state.error = true
+      state.error = true;
     },
     unsetError(state) {
-      state.error = false
+      state.error = false;
     },
     changeLanguage(state) {
       if (state.language === "gr") {
@@ -46,32 +47,30 @@ const keyboardSlice = createSlice({
     },
 
     clearInputText(state) {
-      state.inputText = ''
+      state.inputText = "";
     },
     updateInputText(state, action) {
-
-      let result
-     // [sdb, shouldShift, nextToBeClickedComposing]
+      let result;
+      // [sdb, shouldShift, nextToBeClickedComposing]
       if (!action.payload.newText) {
-        state.inputText = ''
-       result = nextStrokes(
-        '',
-        state.textIndex,
-        state.language,
-        state.nextToBeClickedComposing
-      );
+        state.inputText = "";
+        result = nextStrokes(
+          "",
+          state.textIndex,
+          state.language,
+          state.nextToBeClickedComposing
+        );
       } else {
         state.inputText = action.payload.newText;
 
-      result = nextStrokes(
-        action.payload.newText,
-        state.textIndex,
-        state.language,
-        state.nextToBeClickedComposing
-      );
+        result = nextStrokes(
+          action.payload.newText,
+          state.textIndex,
+          state.language,
+          state.nextToBeClickedComposing
+        );
       }
-      const [sdb, shouldShift, nextToBeClickedComposing] = result
-
+      const [sdb, shouldShift, nextToBeClickedComposing] = result;
 
       state.shouldBeClicked = sdb;
       state.shouldShift = shouldShift;
@@ -148,8 +147,8 @@ const keyboardSlice = createSlice({
       state.shouldBeClicked = { ...strokes };
     },
     clearClicked(state) {
-      state.clicked = { ...strokes }
-    }
+      state.clicked = { ...strokes };
+    },
   },
 });
 

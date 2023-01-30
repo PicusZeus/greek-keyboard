@@ -9,9 +9,9 @@ const KeyboardKey = (props) => {
   const shouldBeClicked = useSelector(
     (state) => state.shouldBeClicked[props.id]
   );
-  const language = useSelector((state) => state.language)
+  const language = useSelector((state) => state.language);
 
-  let keyClasses = [classes.KeyboardKey];
+  let keyClasses = [classes.keyboard_key];
   if (clicked) {
     keyClasses.push(classes.active);
   }
@@ -26,18 +26,17 @@ const KeyboardKey = (props) => {
   if (capslock) {
     if (shift && props.latin) {
       char = char.toLowerCase();
-      latinChar = latinChar.toLowerCase()
+      latinChar = latinChar.toLowerCase();
     } else if (props.latin) {
       char = props.upper;
-      latinChar = latinChar.toUpperCase()
+      latinChar = latinChar.toUpperCase();
     }
   } else {
     if (shift && props.upper) {
       char = props.upper;
       if (props.latin) {
-        latinChar = latinChar.toUpperCase()
+        latinChar = latinChar.toUpperCase();
       }
-
     }
   }
 
@@ -48,23 +47,23 @@ const KeyboardKey = (props) => {
   switch (props.lower) {
     case "keyboard_backspace":
       specialKey = potentialSpecialKey;
-      keyClasses.push(classes.XWide);
+      keyClasses.push(classes.xWide);
       break;
     case "space_bar":
       specialKey = potentialSpecialKey;
-      keyClasses.push(classes.Space);
+      keyClasses.push(classes.space);
       break;
     case "keyboard_capslock":
       specialKey = potentialSpecialKey;
-      keyClasses.push(classes.XWide);
-      keyClasses.push(classes.Activation);
+      keyClasses.push(classes.xWide);
+      keyClasses.push(classes.activation);
       if (capslock) {
-        keyClasses.push(classes.Active);
+        keyClasses.push(classes.activated);
       }
       break;
     case "keyboard_return":
       specialKey = potentialSpecialKey;
-      keyClasses.push(classes.XWide);
+      keyClasses.push(classes.xWide);
       break;
     case "shift":
       specialKey = (
@@ -72,7 +71,7 @@ const KeyboardKey = (props) => {
           keyboard_double_arrow_up
         </span>
       );
-      keyClasses.push(classes.XLWide);
+      keyClasses.push(classes.xLWide);
       if (shift) {
         keyClasses.push(classes.active);
       } else {
@@ -80,39 +79,36 @@ const KeyboardKey = (props) => {
       }
       if (capslock) {
         if (!shouldShift) {
-          keyClasses.push(classes.awaited)
+          keyClasses.push(classes.awaited);
         }
       } else {
-         if (shouldShift) {
-        keyClasses.push(classes.awaited)
-      }
-
+        if (shouldShift) {
+          keyClasses.push(classes.awaited);
+        }
       }
       break;
     case "keyboard_tab":
       specialKey = potentialSpecialKey;
-      keyClasses.push(classes.Wide);
+      keyClasses.push(classes.wide);
       break;
 
     case "\\":
-      keyClasses.push(classes.Wide);
+      keyClasses.push(classes.wide);
       break;
   }
 
-  let mainCharacter = char
-  let secondaryCharacter = latinChar
-  if (language === 'pl' && props.latin) {
-    mainCharacter = latinChar
-    secondaryCharacter = char
-
+  let mainCharacter = char;
+  let secondaryCharacter = latinChar;
+  if (language === "pl" && props.latin) {
+    mainCharacter = latinChar;
+    secondaryCharacter = char;
   }
-
 
   return (
     <button type="button" className={keyClasses.join(" ")}>
       {specialKey ? specialKey : mainCharacter}
       {!specialKey ? (
-        <span className={classes.Latin}>{secondaryCharacter}</span>
+        <span className={classes.latin}>{secondaryCharacter}</span>
       ) : null}
     </button>
   );

@@ -1,18 +1,21 @@
 .mobileDisplay {
   margin: auto;
   display: none;
-  background: aqua;
+  background: linear-gradient(rgba(146, 141, 237, 0.8) 100%, transparent),
+    url("../assets/photos/faceless.jpg") no-repeat;
+
+  background-size: cover;
 }
 
 .desktopDisplay {
   display: flex;
   flex-direction: column;
-}
-
-.animation {
+  align-items: center
 }
 
 .introduction {
+  color: black;
+  opacity: 1;
   text-align: center;
   padding: 1rem;
   font-size: 1.5rem;
@@ -22,17 +25,27 @@
 
 .buttons {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   margin-bottom: 4rem;
+    width: 60%;
+  max-width: 1100px;
+  min-width: 550px;
 }
 
-@media (max-width: 60rem) {
+@media (max-width: 550px) or (max-height: 550px) {
   .mobileDisplay {
     display: block;
     height: 100vh;
     width: 100vw;
   }
-  body {margin: 0}
+  body {
+    margin: 0;
+  }
+  .introduction {
+    margin: auto 1rem;
+    font-size: 2.5rem;
+    font-weight: bolder;
+  }
 
   .desktopDisplay {
     display: none;

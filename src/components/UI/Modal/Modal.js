@@ -1,39 +1,38 @@
 import React from "react";
 import classes from "./Modal.module.css";
 import Backdrop from "../Backdrop/Backdrop";
-import Button from "../Button/Button";
-import EvaluatedText from "../../evaluation/EvaluationMessage";
-import {keyboardActions} from "../../../store";
-
-
-const modal = (props) => {
+import { keyboardActions } from "../../../store";
+import { useSelector } from "react-redux";
+import EvaluationMessage from "../../evaluation/EvaluationMessage";
+import { useDispatch } from "react-redux";
+const Modal = (props) => {
+  const showModal = useSelector((state) => state.showModal);
+  const dispatch = useDispatch();
+  const modalClosed = () => {
+    dispatch(keyboardActions.setShowModal(false));
+    dispatch(keyboardActions.updateInputText(""));
+  };
 
   return (
     <React.Fragment>
-      <Backdrop show={props.show} clicked={props.modalClosed} />
+      <Backdrop show={showModal} clicked={modalClosed} />
       <div
-        className={classes.Modal}
+        className={classes.main_modal}
         style={{
-          transform: props.show ? "translateY(0)" : "translateY(-100vh)",
-          opacity: props.show ? "1" : "0",
+          transform: showModal ? "translateY(0)" : "translateY(-100vh)",
+          opacity: showModal ? "1" : "0",
         }}
       >
         {props.children}
-        <button autoFocus onClick={props.modalClosed}>
+        <button autoFocus className={classes.button} onClick={modalClosed}>
           OK
         </button>
-        <EvaluatedText
-
-
-        />
+        <EvaluationMessage />
       </div>
     </React.Fragment>
   );
 };
 
-export default React.memo(
-  modal,
-  (prevProps, nextProps) =>
-    nextProps.show === prevProps.show &&
-    nextProps.children === prevProps.children
-);
+export default Modal;
+
+

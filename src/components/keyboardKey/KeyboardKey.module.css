@@ -1,4 +1,4 @@
-.KeyboardKey {
+.keyboard_key {
   height: 45px;
   width: 6%;
   max-width: 60px;
@@ -22,59 +22,59 @@
   }
 }
 
-.KeyboardKey :hover :active .active {
+.keyboard_key :hover :active .active {
   background: rgba(255, 255, 255, 0.62);
 }
 
-.Wide {
+.wide {
   width: 13%;
   max-width: 98px;
 }
 @media (max-width: 1015px) {
-  .Wide {
+  .wide {
     width: 10%;
   }
 }
 
-.XWide {
+.xWide {
   width: 18%;
   max-width: 135px;
 }
 @media (max-width: 1015px) {
-  .XWide {
+  .xWide {
     width: 14%;
   }
 }
 
-.XLWide {
+.xLWide {
   width: 23%;
   max-width: 170px;
 }
 
 @media (max-width: 1015px) {
-  .XLWide {
+  .xLWide {
     width: 18%;
   }
 }
 
-.Space {
+.space {
   width: 40%;
   max-width: 540px;
 }
 
-.Latin {
+.latin {
   top: 3px;
   left: 3px;
   position: absolute;
   font-size: 0.8rem;
 }
 @media (max-width: 1015px) {
-  .Latin {
+  .latin {
     font-size: 0.6rem;
   }
 }
 
-.Activation::after {
+.activation::after {
   content: "";
   top: 10px;
   right: 10px;
@@ -85,7 +85,7 @@
   border-radius: 50%;
 }
 
-.Active::after {
+.activated::after {
   background: lightgreen;
 }
 
