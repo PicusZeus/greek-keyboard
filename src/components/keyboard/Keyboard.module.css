@@ -1,6 +1,6 @@
 .keyboard {
   padding: 5px 0;
-  background: darkgray;
+  background: #46555E;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
   user-select: none;
   transition: top 0.4s;

@@ -94,5 +94,8 @@
 }
 
 .awaited {
-  background: green;
+  background: #3A454B;
+  color: white;
+  font-size: 1.4rem;
 }
+
