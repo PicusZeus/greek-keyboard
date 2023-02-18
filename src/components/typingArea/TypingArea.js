@@ -3,21 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useRef, useEffect } from "react";
 import { keyboardActions } from "../../store";
 import {
-  keyboard_gr_map,
   keyboard_eng_map_cons,
   keyboard_eng_map_diacr,
   keyboard_eng_map_vow,
 } from "../../assets/KeyboardGrMap";
-import { texts } from "../../assets/TextsToType";
 import { Fragment } from "react";
 import {
   SHIFT,
-  SPACE,
   CAPSLOCK,
-  DEAD,
   TAB,
-  ACUTE,
-  DIAERESIS,
 } from "../../assets/Variables";
 
 const TypingArea = (props) => {
@@ -45,71 +39,6 @@ const TypingArea = (props) => {
     element.setSelectionRange(selectionStartGreek, selectionStartGreek);
   }, [selectionStartGreek]);
 
-  const singleCharAwaited = (awaitedChar) => {
-    console.log('awaited')
-    if (!awaitedChar) {
-      return null;
-    } else if (awaitedChar === " ") {
-      dispatch(keyboardActions.keyToBeClicked(SPACE));
-    } else if (awaitedChar in keyboard_gr_map) {
-
-      const char = keyboard_gr_map[awaitedChar];
-
-      dispatch(keyboardActions.keyToBeClicked(char[0]));
-      if (SHIFT in char) {
-        dispatch(keyboardActions.shouldShiftOn());
-      }
-    } else if (awaitedChar.toLowerCase() in keyboard_gr_map) {
-      const char = keyboard_gr_map[awaitedChar.toLowerCase()];
-      dispatch(keyboardActions.keyToBeClicked(char[0]));
-      dispatch(keyboardActions.shouldShiftOn());
-    } else {
-      // not greek char
-      const lat_regexp = /[A-z\u00C0-\u00ff]+/g;
-      if (awaitedChar.lower !== awaitedChar && lat_regexp.test(awaitedChar)) {
-        dispatch(keyboardActions.keyToBeClicked(awaitedChar.toLowerCase()));
-        dispatch(keyboardActions.shouldShiftOn());
-      } else if (lat_regexp.test(awaitedChar)) {
-        dispatch(keyboardActions.keyToBeClicked(awaitedChar));
-      }
-    }
-  };
-
-  const combinedCharAwaited = (awaitedChar) => {
-    if (awaitedChar.includes(ACUTE) && awaitedChar.includes(DIAERESIS)) {
-      // there is some difference between win and linux, I will use win binding
-      dispatch(keyboardActions.keyToBeClicked("w"));
-      dispatch(keyboardActions.shouldShiftOn());
-      const charStripped = awaitedChar
-        .replace(ACUTE, "")
-        .replace(DIAERESIS, "");
-      dispatch(keyboardActions.shouldDiaeresisWithAcuteOn(charStripped));
-    } else if (awaitedChar.includes(ACUTE)) {
-      const charStripped = awaitedChar.replace(ACUTE, "");
-      dispatch(keyboardActions.keyToBeClicked(DEAD));
-      dispatch(keyboardActions.shouldAcuteOn(charStripped));
-    } else if (awaitedChar.includes(DIAERESIS)) {
-      const charStripped = awaitedChar.replace(DIAERESIS, "");
-      dispatch(keyboardActions.keyToBeClicked(DEAD));
-      dispatch(keyboardActions.shouldShiftOn());
-      dispatch(keyboardActions.shouldDiaeresisOn(charStripped));
-    }
-  };
-
-  const charAwaitedHandler = (index) => {
-    console.log('clicked')
-    if (index >= texts[props.difficulty].length) {
-      return null;
-    }
-    let awaitedChar = texts[props.difficulty][index];
-    const unicodeChar = awaitedChar.normalize("NFD");
-
-    if (unicodeChar.length > 1) {
-      combinedCharAwaited(unicodeChar);
-    } else {
-      singleCharAwaited(unicodeChar);
-    }
-  };
   const inputGreekSetter = (value, char, selStart) => {
     let newChar = char;
 
@@ -152,7 +81,6 @@ const TypingArea = (props) => {
     selectionStartSetter(selectionStart);
 
     const char = event.nativeEvent.data;
-    console.log(char, 'CHAR')
 
     const re = new RegExp("[a-zA-Z|;:≤≥]");
 
@@ -195,17 +123,6 @@ const TypingArea = (props) => {
     }
   };
 
-  const prepareTextArea = (event) => {
-    console.log(event.target.value, 'EVENT', event.target.selectionStart, event.nativeEvent.data)
-
-    // charAwaitedHandler(inputText.length);
-    inputTextHandler(event);
-    if (event.getModifierState(CAPSLOCK)) {
-      dispatch(keyboardActions.capslockOn());
-    } else {
-      dispatch(keyboardActions.capslockOff());
-    }
-  };
 
   return (
     <Fragment>
@@ -220,7 +137,7 @@ const TypingArea = (props) => {
         onChange={(event) => inputTextHandler(event, event.target.value)}
         onKeyDownCapture={(event) => keyDownHandler(event)}
         onKeyUpCapture={keyUpHandler}
-        onClick={(event) => prepareTextArea(event)}
+        onClick={(event) => inputTextHandler(event, event.target.value)}
         ref={ref}
       />
     </Fragment>
