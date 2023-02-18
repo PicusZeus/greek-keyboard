@@ -46,11 +46,13 @@ const TypingArea = (props) => {
   }, [selectionStartGreek]);
 
   const singleCharAwaited = (awaitedChar) => {
+    console.log('awaited')
     if (!awaitedChar) {
       return null;
     } else if (awaitedChar === " ") {
       dispatch(keyboardActions.keyToBeClicked(SPACE));
     } else if (awaitedChar in keyboard_gr_map) {
+
       const char = keyboard_gr_map[awaitedChar];
 
       dispatch(keyboardActions.keyToBeClicked(char[0]));
@@ -95,6 +97,7 @@ const TypingArea = (props) => {
   };
 
   const charAwaitedHandler = (index) => {
+    console.log('clicked')
     if (index >= texts[props.difficulty].length) {
       return null;
     }
@@ -149,10 +152,11 @@ const TypingArea = (props) => {
     selectionStartSetter(selectionStart);
 
     const char = event.nativeEvent.data;
+    console.log(char, 'CHAR')
 
     const re = new RegExp("[a-zA-Z|;:≤≥]");
 
-    if (language === "gr" && re.exec(char) && char !== null) {
+    if (language === "gr" && re.exec(char) && char !== null && char !== undefined) {
       inputGreekSetter(value, char, selectionStart);
     } else {
       dispatch(keyboardActions.updateInputText({ newText: value }));
@@ -192,7 +196,10 @@ const TypingArea = (props) => {
   };
 
   const prepareTextArea = (event) => {
-    charAwaitedHandler(inputText.length);
+    console.log(event.target.value, 'EVENT', event.target.selectionStart, event.nativeEvent.data)
+
+    // charAwaitedHandler(inputText.length);
+    inputTextHandler(event);
     if (event.getModifierState(CAPSLOCK)) {
       dispatch(keyboardActions.capslockOn());
     } else {
@@ -213,7 +220,7 @@ const TypingArea = (props) => {
         onChange={(event) => inputTextHandler(event, event.target.value)}
         onKeyDownCapture={(event) => keyDownHandler(event)}
         onKeyUpCapture={keyUpHandler}
-        onClick={prepareTextArea}
+        onClick={(event) => prepareTextArea(event)}
         ref={ref}
       />
     </Fragment>

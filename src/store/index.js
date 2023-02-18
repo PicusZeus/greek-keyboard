@@ -132,7 +132,10 @@ const keyboardSlice = createSlice({
       state.shouldDiaeresis = false;
     },
     keyToBeClicked(state, action) {
+      console.log(action.payload)
+
       state.shouldBeClicked[action.payload] = true;
+
     },
 
     shouldDiaeresisWithAcuteOn(state, action) {
